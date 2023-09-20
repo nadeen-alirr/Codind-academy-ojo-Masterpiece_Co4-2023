@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -12,14 +13,28 @@ import {
 import InputFiled from "../components/InputFiled";
 import Navigator from "../components/Navigator";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 const Home = () => {
+
     const navigation = useNavigation();
+    const [courses, setCourses] = useState([]); 
+    console.log("Before axios request");
+    axios.get("http://localhost:3010/api/getCourse")
+      .then(response => {
+        console.log("Response:", response.data);
+        setCourses(response.data.courses);
+      })
+      .catch(error => {
+        console.error("Error fetching courses:", error);
+      });
+    console.log("After axios request");
     const handle_search=()=>{
         navigation.navigate('Result');
     }
     const handle_Items=()=>{
         navigation.navigate('Details')
     }
+   console.log(courses)
   return (
     <SafeAreaView style={styles.Maincontainer}>
       <View>
@@ -76,7 +91,7 @@ const Home = () => {
             </View>
         </View>
         <TouchableOpacity style={styles.container_info_card} onPress={handle_Items}>
-        <Text style={styles.duration}>3 h 30 min</Text>
+        <Text style={styles.duration}>{courses.duration}</Text>
         <Text style={styles.Title}>UI</Text>
         <Text style={styles.description}>Advanced mobile interface design</Text>
         </TouchableOpacity>
