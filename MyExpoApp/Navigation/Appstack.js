@@ -28,7 +28,7 @@ const Appstack = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.110:3010/api/getCourse")
+      .get("http://192.168.1.131:3010/api/getCourse")
       .then((response) => {
         setAllcourse(response.data.courses);
       })
@@ -58,7 +58,7 @@ const Appstack = () => {
         <Stack.Screen name="Cart course" component={CartCourse} />
         <Stack.Screen name="Payment Method" component={Ordercomfirmation} />
 
-        {/* Add more app screens here */}
+       
       </Stack.Navigator>
     </CourseContext.Provider>
   );

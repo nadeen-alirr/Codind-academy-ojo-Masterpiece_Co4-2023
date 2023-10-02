@@ -77,7 +77,7 @@ export const Authprovider = ({ children }) => {
   useEffect(() => {
     isLoggedIn();
   }, []);
-  // Place this at the component level, not inside a function
+ 
   
   return (
     <AuthContext.Provider value={{ login, logout, isLoading, userToken ,userInfo}}>

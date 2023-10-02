@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     },
     cart: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course' // Reference to your Course model
+        ref: 'Course' 
     }],
     cards: [{
         nameOnCard: {
@@ -45,7 +45,8 @@ const userSchema = new mongoose.Schema({
             type: String, 
             required: true
         }
-    }]
+    }],
+    payments: [String]
 
 })
 
@@ -58,7 +59,7 @@ userSchema.pre('save', async function (next) {
     }
     
     try {
-        const saltRounds = 10; // Define saltRounds here
+        const saltRounds = 10; 
         const hashedPassword = await bcrypt.hash(this.password, saltRounds);
         this.password = hashedPassword;
         return next();
@@ -75,7 +76,5 @@ userSchema.methods.generateAuthToken = function () {
     );
     return token;
 };
-
-
 const user = mongoose.model('User', userSchema );
 module.exports = user;

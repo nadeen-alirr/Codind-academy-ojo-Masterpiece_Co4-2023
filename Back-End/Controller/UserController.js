@@ -121,7 +121,7 @@ const upload = async (req, res, next) => {
 
     const file = req.file;
 
-    // Save the file to a temporary location on the server
+    
     const filePath = `temp/${file.originalname}`;
     console.log('Saving file to:', filePath); // Add this line
     fs.writeFile(filePath, file.buffer, (err) => {
@@ -131,7 +131,7 @@ const upload = async (req, res, next) => {
       }
       console.log('File saved successfully:', filePath); // Add this line
 
-      // Upload the saved file to Cloudinary
+     
       cloudinary.uploader.upload(filePath, (error, result) => {
         // Delete the temporary file after upload
         fs.unlink(filePath, (err) => {
@@ -156,29 +156,29 @@ const upload = async (req, res, next) => {
   });
 }
 
-const addinfocard = async(req,res)=>{
-  try {
-    const { userId } = req.params;
-    const { nameOnCard, cardNumber, expiryDate, cvc, cardType } = req.body;
+// const addinfocard = async(req,res)=>{
+//   try {
+//     const { userId } = req.params;
+//     const { nameOnCard, cardNumber, expiryDate, cvc, cardType } = req.body;
 
-    // Find the user by ID
-    const foundUser = await user.findById(userId);
+//     // Find the user by ID
+//     const foundUser = await user.findById(userId);
 
-    if (!foundUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+//     if (!foundUser) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
 
-    // Add card information to the user
-    foundUser.cards.push({ nameOnCard, cardNumber, expiryDate, cvc, cardType });
+   
+//     foundUser.cards.push({ nameOnCard, cardNumber, expiryDate, cvc, cardType });
 
-    // Save the user document with the updated card information
-    await foundUser.save();
+//     // Save the user document with the updated card information
+//     await foundUser.save();
 
-    return res.status(200).json({ message: 'Card information added successfully' });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
+//     return res.status(200).json({ message: 'Card information added successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// }
 
-module.exports = { Signup, verifyToken, login , upload , addinfocard};
+module.exports = { Signup, verifyToken, login , upload };

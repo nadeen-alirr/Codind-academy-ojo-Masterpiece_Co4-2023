@@ -12,6 +12,8 @@ import axios from "axios";
 import Svg, { Path } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 
+
+
 const CartCourse = () => {
     const navigation = useNavigation();
   const { userInfo ,userToken } = useContext(AuthContext);
@@ -33,7 +35,7 @@ const CartCourse = () => {
     const fetchCourses = async () => {
       try {
         console.log(id_user)
-        const response = await axios.get(`http://192.168.1.110:3010/api/getCourseuser/${id_user}`);
+        const response = await axios.get(`http://10.7.2.104:3010/api/getCourseuser/${id_user}`);
         console.log('Courses:', response.data);
         setCourses(response.data.courses);
         console.log(courses)
@@ -70,7 +72,7 @@ const CartCourse = () => {
 
   setTotalPrice(newTotalPrice);
 
-  // Update total item count
+  
   setItemCount(selectedCourses.length -1);
   }, [selectedCourses, courses]);
   const handleDelete=async (idcourse)=>{
@@ -78,15 +80,14 @@ const CartCourse = () => {
         console.log('Deleting course with ID:', idcourse);
         console.log('Selected Courses:', selectedCourses);
     
-        await axios.delete(`http://192.168.1.110:3010/api/deleteitemcart/${id_user}/${idcourse}`);
+        await axios.delete(`http://192.168.1.131:3010/api/deleteitemcart/${id_user}/${idcourse}`);
     
         setCourses((prevCourses) => prevCourses.filter((course) => course._id !== idcourse));
     
-        // Calculate new selected courses after deletion
         const newSelectedCourses = selectedCourses.filter(courseId => courseId !== idcourse);
         setSelectedCourses(newSelectedCourses);
     
-        // Update total item count
+       
         setItemCount(newSelectedCourses.length);
       } catch (error) {
         console.error('Error deleting item from cart:', error.message);
@@ -97,7 +98,7 @@ const CartCourse = () => {
         userId: decodedToken.id,
         selectedCourses,
         totalPrice,
-        // ...other necessary data
+     
       };
     // alert('Thank you for your purchase!');
     navigation.navigate('Payment Method', { checkoutData });

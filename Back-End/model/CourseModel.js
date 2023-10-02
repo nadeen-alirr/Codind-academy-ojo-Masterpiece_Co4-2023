@@ -11,7 +11,7 @@ const lessonSchema = new mongoose.Schema({
       default: false
     },
     image: {
-      type: String, // You can store the image URL as a string
+      type: String, 
       
     }
   });
@@ -35,10 +35,10 @@ const lessonSchema = new mongoose.Schema({
     },
     image: {
       type: String,
-      required: true, // Make the image field optional
+      required: true, 
     },
-    labels: [String], // An array of strings for labels like "programming," "design," etc.
-    paragraphDescription: String, // A small paragraph about the course
+    labels: [String], 
+    paragraphDescription: String, 
     lessons: [lessonSchema]
   });
   

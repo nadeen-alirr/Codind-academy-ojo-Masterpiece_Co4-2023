@@ -62,7 +62,7 @@ const Setting = () => {
       console.log("selectedAsset.fileName: " + selectedAsset.fileName);
   
       try {
-        const result = await fetch('http://192.168.1.110:3010/api/upload', {
+        const result = await fetch('http://10.7.2.104:3010/api/upload', {
           method: 'POST',
           body: formData,
           headers: {

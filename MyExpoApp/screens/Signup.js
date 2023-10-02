@@ -57,7 +57,7 @@ const Signup = () => {
   
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await axios.post("http://192.168.1.110:3010/api/signup", {
+        const response = await axios.post("http://10.7.2.104:3010/api/signup", {
           username: username,
           email: email,
           password: password,
@@ -146,6 +146,7 @@ const Signup = () => {
       </View>
     </SafeAreaView>
   );
+  
 };
 export default Signup;
 

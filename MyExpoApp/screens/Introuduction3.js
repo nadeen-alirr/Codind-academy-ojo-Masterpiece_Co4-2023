@@ -11,7 +11,6 @@ import {
   TextInput,
   Button,
 } from "react-native";
-
 import StepsProgress from "../components/StepsProgress";
 import { useNavigation } from "@react-navigation/native";
 const Introuduction3 = () => {

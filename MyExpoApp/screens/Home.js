@@ -25,7 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.110:3010/api/getCourse")
+      .get("http://10.7.2.104:3010/api/getCourse")
       .then((response) => {
         setCourses(response.data.courses);
       })
@@ -239,7 +239,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
   },
-  description: {},
+  description: {
+    
+  },
   container_info_card: {
     marginLeft: 15,
     padding: 12,

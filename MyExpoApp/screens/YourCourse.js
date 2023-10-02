@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useContext, useEffect, useState}from "react";
 import {
   View,
   StyleSheet,
@@ -9,61 +9,73 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
+import jwt_decode from "jwt-decode";
 import Navigator from "../components/Navigator";
+import { AuthContext } from "../context/Authcontext";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import Svg, { Path } from 'react-native-svg';
+
 const YourCourse = () => {
-  const navigation = useNavigation();
+  const [paymentCourses, setPaymentCourses] = useState([]);
+const { userInfo ,userToken } = useContext(AuthContext);
+console.log("the user info and user token in card screen : " + userInfo + userToken);
+const token = userToken.replace("Bearer ", "");
+const decodedToken = jwt_decode(token);
+console.log("Decoded Token user name:", decodedToken.username);
+console.log("Decoded Token id:", decodedToken.id);
+console.log("Decoded Token email:", decodedToken.email);
+
+const id_user=decodedToken.id
+const navigation = useNavigation();
+useEffect(() => {
+  const fetchPaymentCourses = async () => {
+    try {
+      const response = await fetch(`http://10.7.2.104:3010/api/yourCourse/${id_user}`);
+      const data = await response.json();
+      setPaymentCourses(data.coursesInPayments);
+      console.log(paymentCourses)
+    } catch (error) {
+      console.error('Error fetching payment courses:', error);
+    }
+  };
+
+  fetchPaymentCourses();
+}, []);
+
   const handle_Items = () => {
     navigation.navigate("Choose Lessons Course");
   };
+  
   return (
     <SafeAreaView style={styles.Maincontainer}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContainer}
       >
-        <View style={styles.ContainerImage}>
+         {paymentCourses.map((course) => (
+        <View style={styles.ContainerImage} key={course._id}>
           <View style={styles.background_image}>
             <Image
-              source={require("../assets/images/Cool_Kids_Discussion.png")}
+             source={{ uri: course.image }} 
               style={styles.image_category}
-            ></Image>
-            <View style={styles.container_price}>
-              <Text style={styles.price}>$50</Text>
-            </View>
+              resizeMode="contain"
+            >
+              
+            </Image>
           </View>
           <TouchableOpacity
             style={styles.container_info_card}
             onPress={handle_Items}
           >
-            <Text style={styles.duration}>3 h 30 min</Text>
-            <Text style={styles.Title}>UI</Text>
+            <Text style={styles.duration}>{course.duration}</Text>
+            <Text style={styles.Title}>{course.title}</Text>
             <Text style={styles.description}>
-              Advanced mobile interface design
+            {course.description}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.ContainerImage}>
-          <View style={styles.background_image}>
-            <Image
-              source={require("../assets/images/Cool_Kids_Discussion.png")}
-              style={styles.image_category}
-            ></Image>
-            <View style={styles.container_price}>
-              <Text style={styles.price}>$50</Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.container_info_card}
-            onPress={handle_Items}
-          >
-            <Text style={styles.duration}>3 h 30 min</Text>
-            <Text style={styles.Title}>UI</Text>
-            <Text style={styles.description}>
-              Advanced mobile interface design
-            </Text>
-          </TouchableOpacity>
-        </View>
+         ))}
       </ScrollView>
       <View style={styles.navigator}>
         <Navigator />
@@ -92,19 +104,21 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
   },
   background_image: {
-    backgroundColor: "#D2E6E4",
-    paddingBottom: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 15,
+    // backgroundColor: "#D2E6E4",
+    // paddingBottom: 50,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // paddingTop: 15,
     borderTopEndRadius: 10,
     borderTopStartRadius: 10,
   },
   image_category: {
     borderRadius: 10,
+    height: 200,
+    width: "100%",
   },
   duration: {
-    // color:'#D2E6E1',
+    color:'#0B7077',
   },
   Title: {
     fontWeight: "bold",

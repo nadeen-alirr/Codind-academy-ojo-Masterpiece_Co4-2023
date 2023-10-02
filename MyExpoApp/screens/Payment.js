@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native"; 
 import { Platform } from "react-native";
+import axios from "axios";
 
 const Payment = () => {
 

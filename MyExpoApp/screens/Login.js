@@ -1,4 +1,4 @@
-import React ,{useContext, useEffect, useState}from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   StyleSheet,
@@ -9,14 +9,16 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
+
 import InputFiled from "../components/InputFiled";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/Authcontext";
 import { Platform } from "react-native";
+
 const Login = () => {
-  const {login} = useContext(AuthContext)
+  const { login } = useContext(AuthContext);
   const navigation = useNavigation();
- 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -33,14 +35,8 @@ const Login = () => {
     }
 
     setErrors(newErrors);
-    console.log("Errors:", newErrors); // Add this line for debugging
+    console.log("Errors:", newErrors); 
   };
-
-  // useEffect(() => {
-  //   if (email || password) {
-  //     validateForm();
-  //   }
-  // }, [email, password]);
 
   const handleLogin = () => {
     console.log("handleLogin called");
@@ -69,29 +65,29 @@ const Login = () => {
         <Text style={styles.title}>Login</Text>
       </View>
       <View style={styles.containerINPUTEmail}>
-      
-        <InputFiled 
+        <InputFiled
           placeholder={"Email"}
           value={email}
           onChangeText={(text) => {
             setEmail(text);
-            setErrors({ ...errors, email: '' }); // Clear the error when the user types
+            setErrors({ ...errors, email: "" }); // Clear the error when the user types
           }}
         ></InputFiled>
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
       </View>
       <View style={styles.containerINPUTEmail}>
         <InputFiled
-            placeholder={"password"}
-            secureTextEntry={true}
-            value={password}
-             onChangeText={(text) => {
-              setPassword(text);
-              setErrors({ ...errors, password: '' }); // Clear the error when the user types
-            }}
-
+          placeholder={"password"}
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+            setErrors({ ...errors, password: "" }); // Clear the error when the user types
+          }}
         ></InputFiled>
-         {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
       </View>
       <TouchableOpacity style={styles.containernote}>
         <Text style={styles.note}>Forget password ?</Text>
@@ -104,7 +100,6 @@ const Login = () => {
             validateForm();
             await handleLogin();
           }}
-          
         >
           <Text style={styles.SignUp}>Login</Text>
         </TouchableOpacity>
@@ -187,8 +182,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 10,
-    marginLeft:18
+    marginLeft: 18,
   },
 });

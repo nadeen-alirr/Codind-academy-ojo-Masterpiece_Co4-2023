@@ -18,8 +18,8 @@ import {
         style={styles.input}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
-        value={value} // Bind the value to the searchQuery
-        onChangeText={onChangeText} // Handle input changes
+        value={value} 
+        onChangeText={onChangeText} 
       />
     </View>
     )

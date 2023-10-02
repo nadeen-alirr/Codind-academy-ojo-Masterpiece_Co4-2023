@@ -1,4 +1,4 @@
-import React ,{useContext}from "react";
+import React, { useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StyleSheet,
@@ -21,11 +21,11 @@ const ProductDetail = () => {
   const { userInfo, userToken } = useContext(AuthContext);
   const route = useRoute();
   const { itemData } = route.params;
-  console.log("Item Data:", itemData)
+  console.log("Item Data:", itemData);
   const navigation = useNavigation();
-  const handle_back =()=>{
-    navigation.navigate('Home')
-  }
+  const handle_back = () => {
+    navigation.navigate("Home");
+  };
   console.log("the token in the details :" + userToken);
   const token = userToken.replace("Bearer ", "");
   const decodedToken = jwt_decode(token);
@@ -33,31 +33,31 @@ const ProductDetail = () => {
   console.log("Decoded Token id:", decodedToken.id);
   console.log("Decoded Token email:", decodedToken.email);
 
-
-  const handle_add =async()=>{
+  const handle_add = async () => {
     try {
-      const userId = decodedToken.id; 
-      const courseId = itemData._id; 
-  
-      const response = await fetch('http://192.168.1.110:3010/api/addToCart', {
-        method: 'POST',
+      const userId = decodedToken.id;
+      const courseId = itemData._id;
+
+      const response = await fetch("http://10.7.2.104:3010/api/addToCart", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`, 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify({ userId, courseId }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message); 
+        console.log(data.message);
       } else {
-        throw new Error('Error adding course to cart');
+        throw new Error("Error adding course to cart");
       }
-      navigation.navigate('Cart course', { userId, courseId });    } catch (error) {
+      navigation.navigate("Cart course", { userId, courseId });
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.Maincontainer}>
@@ -69,7 +69,7 @@ const ProductDetail = () => {
       </View>
       <View style={styles.containerImage}>
         <Image
-         source={{ uri: itemData.image }}
+          source={{ uri: itemData.image }}
           resizeMode="contain"
           style={styles.ImageCourse}
         ></Image>
@@ -79,9 +79,7 @@ const ProductDetail = () => {
           <Text style={styles.price}>{itemData.price}</Text>
         </View>
         <Text style={styles.Title}>About the course</Text>
-        <Text style={styles.description}>
-        {itemData.Summary}
-        </Text>
+        <Text style={styles.description}>{itemData.Summary}</Text>
       </View>
       <View style={styles.containerDuration}>
         <Text style={styles.duration}>Duration</Text>
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
   containerImage: {
     alignItems: "center",
     justifyContent: "center",
-    margin:15
+    margin: 15,
   },
   ImageCourse: {
     height: 200,
@@ -130,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 7,
     padding: 12,
-    marginTop:10
+    marginTop: 10,
   },
   container_price: {
     backgroundColor: "#0B7077",
@@ -169,9 +167,9 @@ const styles = StyleSheet.create({
   },
   text_btn: {
     color: "#fff",
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
-  duration_time:{
-    color:'#0B7077'
-  }
+  duration_time: {
+    color: "#0B7077",
+  },
 });

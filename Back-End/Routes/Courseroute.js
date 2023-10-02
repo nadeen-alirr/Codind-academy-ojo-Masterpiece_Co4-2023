@@ -19,6 +19,7 @@ router.post('/upload',usercontroller.upload)
 router.post('/addToCart', courseController.addToCart);
 router.get('/getCourseuser/:userId' ,courseController.getcourse)
 router.delete('/deleteitemcart/:userId/:courseId',courseController.delete_item_cart)
-// router.post('/checkout',courseController.payment)
-router.post('/addinfocard/:userId',usercontroller.addinfocard)
+router.post('/checkout/:userId',courseController.payment)
+// router.post('/addinfocard/:userId',usercontroller.addinfocard)
+router.get("/yourCourse/:userId",courseController.YourCourse)
 module.exports = router;
