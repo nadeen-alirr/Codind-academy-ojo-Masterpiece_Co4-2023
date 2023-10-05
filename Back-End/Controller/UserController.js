@@ -111,7 +111,8 @@ const login = async (req, res, next) => {
 // const update = async (req, res, next) => {
   
 // }
-const upload = async (req, res, next) => {
+
+const upload = async (req, res) => {
   
   uploadimage(req, res, (err) => {
     if (err) {
@@ -180,5 +181,34 @@ const upload = async (req, res, next) => {
 //     return res.status(500).json({ message: 'Internal Server Error' });
 //   }
 // }
+const editinfo= async(req,res)=>{
+  try {
+    const userId = req.params.userId; // Assuming the user ID is passed in the URL params
+    const { username, email } = req.body; // Assuming these are the fields to be edited
 
-module.exports = { Signup, verifyToken, login , upload };
+    const foundUser = await user.findById(userId);
+
+    if (!foundUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (username) {
+      foundUser.username = username;
+    }
+
+    if (email) {
+      foundUser.email = email;
+    }
+
+   
+
+    await foundUser.save();
+
+    return res.status(200).json({ message: 'User information updated successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+
+}
+module.exports = { Signup, verifyToken, login , upload ,editinfo};

@@ -35,7 +35,7 @@ const CartCourse = () => {
     const fetchCourses = async () => {
       try {
         console.log(id_user)
-        const response = await axios.get(`http://10.7.2.104:3010/api/getCourseuser/${id_user}`);
+        const response = await axios.get(`http://192.168.1.131:3010/api/getCourseuser/${id_user}`);
         console.log('Courses:', response.data);
         setCourses(response.data.courses);
         console.log(courses)

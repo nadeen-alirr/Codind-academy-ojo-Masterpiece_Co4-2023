@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -12,13 +12,55 @@ import {
   Button,
   ScrollView,
 } from "react-native";
+import { AuthContext } from "../context/Authcontext";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
 const Choose_Lessons_Course = () => {
   const navigation = useNavigation();
+  const { userInfo ,userToken } = useContext(AuthContext);
+  const [lessons, setLessons] = useState([]);
+  const [course, setCourse] = useState([]);
+
+  const route = useRoute();
+  const { itemData } = route.params;
+  console.log("Item Data:", itemData);
+  console.log("the user info and user token in card screen : " + userInfo + userToken);
+  const token = userToken.replace("Bearer ", "");
+  const decodedToken = jwt_decode(token);
+  console.log("Decoded Token user name:", decodedToken.username);
+  console.log("Decoded Token id:", decodedToken.id);
+  console.log("Decoded Token email:", decodedToken.email);
+  const userId = decodedToken.id;
+  const courseId = itemData._id;
   const handle_back = () => {
     navigation.navigate("Your Course");
   };
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await axios.get(`http://192.168.1.131:3010/api/getlessons/${courseId}/${userId}`);
+        console.log('data', response.data);
+        setLessons(response.data.lessons);
+        setCourse(response.data.course);
+        
+        // console.log("the lessons data", JSON.stringify(response.data.lessons));
+        // console.log("the course data", JSON.stringify(response.data.course));
+       
+        const lessonsarray= JSON.stringify(response.data.lessons)
+        const coursearray= JSON.stringify(response.data.course)
+        console.log("the lessons array :" + lessonsarray)
+        console.log("the course array :" + coursearray)
+
+      } catch (error) {
+        console.error('Error fetching lessons:', error.message);
+      }
+    };
+  
+    fetchLessons();
+  }, []);
   return (
     <SafeAreaView style={styles.Maincontainer}>
       <View style={styles.container_header}>
@@ -29,7 +71,7 @@ const Choose_Lessons_Course = () => {
           ></Image>
         </TouchableOpacity>
         <View style={styles.container_title}>
-          <Text style={styles.title}>HTML</Text>
+          <Text style={styles.title}>{course.title}</Text>
         </View>
       </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -37,7 +79,8 @@ const Choose_Lessons_Course = () => {
           <View style={styles.container_Image}>
             <View style={styles.backgroundImage}>
               <Image
-                source={require("../assets/images/Cool_Kids_Long_Distance_Relationship.png")}
+                source={{ uri: course.image }} 
+                style={styles.image_Course}
               ></Image>
               <View style={styles.container_play_btn}>
                 <TouchableOpacity>
@@ -48,53 +91,28 @@ const Choose_Lessons_Course = () => {
               </View>
             </View>
             <View style={styles.container_details}>
-              <Text style={styles.title_course}>HTML</Text>
+              <Text style={styles.title_course}>{course.title}</Text>
               <Text style={styles.mini_description}>
-                Advanced web applications
+              {course.description}
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.container_lessons}>
-          <TouchableOpacity style={styles.container_details_lessons}>
-            <Image
-              source={require("../assets/images/Cool_Kids_Long_Distance_Relationship.png")}
-              style={styles.image_lessons_course}
-            
-            ></Image>
-            <View style={styles.container_lessons_name_progress_bar}>
-              <Text>Main Tags</Text>
-              <View style={styles.container_progress_bar}>
-                <View style={styles.progress_bar_indicetor}></View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.container_details_lessons}>
-            <Image
-              source={require("../assets/images/Cool_Kids_OnWheels.png")}
-              style={styles.image_lessons_course}
-            
-            ></Image>
-            <View style={styles.container_lessons_name_progress_bar}>
-              <Text>Tags For Header</Text>
-              <View style={styles.container_progress_bar}>
-                <View style={styles.progress_bar_indicetor}></View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.container_details_lessons}>
-            <Image
-              source={require("../assets/images/Cool_Kids_Long_Distance_Relationship.png")}
-              style={styles.image_lessons_course}
-            
-            ></Image>
-            <View style={styles.container_lessons_name_progress_bar}>
-              <Text>Style Tags</Text>
-              <View style={styles.container_progress_bar}>
-                <View style={styles.progress_bar_indicetor}></View>
-              </View>
-            </View>
-          </TouchableOpacity>
+        {lessons.map((lesson, index) => (
+    <TouchableOpacity style={styles.container_details_lessons} key={index}>
+      <Image
+        source={{ uri: lesson.image }} // Assuming `image` is the URL of the lesson image
+        style={styles.image_lessons_course}
+      />
+      <View style={styles.container_lessons_name_progress_bar}>
+        <Text style={styles.titlelessons}>{lesson.title}</Text>
+        <View style={styles.container_progress_bar}>
+          <View style={styles.progress_bar_indicetor}></View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -130,7 +148,7 @@ const styles = StyleSheet.create({
     marginLeft: 14,
   },
   backgroundImage: {
-    backgroundColor: "#D2E6E4",
+    // backgroundColor: "#D2E6E4",
     borderTopEndRadius: 10,
     borderTopStartRadius: 10,
   },
@@ -151,6 +169,7 @@ const styles = StyleSheet.create({
   },
   mini_description: {
     color: "gray",
+    fontSize:13
   },
   container_details: {
     flexDirection: "column",
@@ -158,10 +177,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   container_play_btn: {
-    backgroundColor: "#FFF5EE",
+    // backgroundColor: "#FFF5EE",
     alignItems: "flex-end",
     paddingRight: 15,
-    paddingBottom: 8,
+    paddingTop: 15,
+    // paddingBottom: 8,
   },
   //   lessons styles
   container_lessons: {
@@ -171,9 +191,10 @@ const styles = StyleSheet.create({
   },
   image_lessons_course: {
     resizeMode:"contain",
-    width:80,
+    width:70,
     height:50,
     flexDirection:'column',
+    borderRadius:12,
   },
   container_details_lessons:{
     flex:1,
@@ -186,7 +207,9 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
   },
   container_lessons_name_progress_bar:{
-    flex:1
+    flex:1,
+    marginLeft:15
+    
   },
   container_progress_bar:{
     width:'100%',
@@ -200,6 +223,18 @@ const styles = StyleSheet.create({
     backgroundColor:'#94C0E9',
     width:'50%',
     height:'100%',
+  },
+  titlelessons:{
+    fontWeight:'500',
+    fontSize:13
+  },
+  image_Course:{
+    // width:"100%",
+    // height:200,
+    // resizeMode:"cover",
+    borderRadius: 10,
+    height: 200,
+    width: "100%",
   }
 });
 export default Choose_Lessons_Course;

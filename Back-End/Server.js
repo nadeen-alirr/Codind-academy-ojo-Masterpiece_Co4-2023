@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-
+const multer = require('multer');
+const bodyParser = require('body-parser');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3010;
@@ -10,10 +11,11 @@ const CourseRoutes = require('./Routes/Courseroute.js');
 const crypto = require('crypto');
 
 app.use(express.json());
+app.use(bodyParser.json());
 
 // Configure CORS
 const corsOptions = {
-    origin: 'http://192.168.1.110:3010', // Update with your React Native app's URL
+    origin: 'http://10.7.1.227:3010', // Update with your React Native app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,

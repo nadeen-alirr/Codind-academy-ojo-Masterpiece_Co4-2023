@@ -18,6 +18,9 @@ import CartCourse from "../screens/CardCourse";
 import Ordercomfirmation from "../screens/Ordercomfirmation";
 const Stack = createStackNavigator();
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { AuthContext } from "../context/Authcontext";
+
 const CourseContext = createContext();
 export const useCourseContext = () => {
   return useContext(CourseContext);
@@ -25,10 +28,18 @@ export const useCourseContext = () => {
 
 const Appstack = () => {
   const [Allcourse, setAllcourse] = useState([]);
+  const { userInfo ,userToken } = useContext(AuthContext);
+  const token = userToken.replace("Bearer ", "");
+  const decodedToken = jwt_decode(token);
+  // console.log("Decoded Token user name:", decodedToken.username);
+  // console.log("Decoded Token id:", decodedToken.id);
+  // console.log("Decoded Token email:", decodedToken.email);
+
+  const id_user=decodedToken.id
 
   useEffect(() => {
     axios
-      .get("http://192.168.1.131:3010/api/getCourse")
+      .get(`http://192.168.1.131:3010/api/getCourse/${id_user}`)
       .then((response) => {
         setAllcourse(response.data.courses);
       })

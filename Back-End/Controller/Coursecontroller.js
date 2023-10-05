@@ -9,16 +9,39 @@ const fs = require('fs').promises;
 
 const get_Course = async (req, res) => 
 {
-    try {
-        const courses = await Course.find(); 
-    
-        return res.status(200).json({ success: true, courses });
-      } catch (error) {
-        console.error('Error retrieving courses:', error);
-        return res.status(500).json({ success: false, message: 'Error retrieving courses', error: error.message });
-    }
-  }
+  try {
+    const userId = req.params.userId;
 
+    // Retrieve user cart count
+    const user = await User.findById(userId);
+    const cartCount = user.cart.length;
+    const username = user.username
+    // Retrieve all courses
+    const courses = await Course.find();
+
+    return res.status(200).json({ success: true, courses, cartCount,username });
+  } catch (error) {
+    console.error('Error retrieving courses:', error);
+    return res.status(500).json({ success: false, message: 'Error retrieving courses', error: error.message });
+  }
+  }
+const getcount=async(req,res)=>{
+  try {
+    const userId = req.params.userId;
+
+  
+    const user = await User.findById(userId);
+    const cartCount = user.cart.length;
+    const username = user.username
+  
+
+    return res.status(200).json({ success: true, cartCount ,username });
+  } catch (error) {
+    console.error('Error retrieving courses:', error);
+    return res.status(500).json({ success: false, message: 'Error retrieving courses', error: error.message });
+
+}
+}
   const addToCart  = async (req, res) => {
     try {
       const { userId, courseId } = req.body;
@@ -133,4 +156,61 @@ const YourCourse  =async(req ,res) =>{
     res.status(500).json({ message: "Internal server error" });
   }
 }
-module.exports= { get_Course , addToCart , getcourse , delete_item_cart , payment ,YourCourse};
+const get_lessons = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const courseId = req.params.courseId;
+
+    // Assuming you have a 'Lesson' model and want to find lessons associated with the courseId
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+    const lessons = course.lessons;
+
+    return res.status(200).json({ lessons ,course});
+  } catch (error) {
+    console.error('Error fetching lessons:', error.message);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+// const add_course = (req,res)=>{
+//   console.log('Adding a new course...');
+//   const newCourse = new Course({
+//     title: "Web Development Bootcamp",
+//     description: "Master the art of web development from scratch.",
+//     price: 79.99,
+//     duration: "3h 15min",
+//     labels: ["web development"],
+//     lessons: [
+//       {
+//         title: "Introduction to HTML",
+//         completed: "false",
+//         image: "https://res.cloudinary.com/dnjosoyjq/image/upload/v1693426640/html.jpg"
+//       },
+//       {
+//         title: "CSS Styling Techniques",
+//         completed: "false",
+//         image: "https://res.cloudinary.com/dnjosoyjq/image/upload/v1693426759/css.jpg"
+//       },
+//       {
+//         title: "JavaScript Fundamentals",
+//         completed: "false",
+//         image: "https://res.cloudinary.com/dnjosoyjq/image/upload/v1693426759/js.jpg"
+//       }
+//     ],
+//     image: "https://res.cloudinary.com/dnjosoyjq/image/upload/v1693425370/web_dev.jpg",
+//     Summary: "Dive into the world of web development with this comprehensive bootcamp. Learn HTML, CSS, and JavaScript to build dynamic and interactive websites."
+//   });
+  
+//   newCourse.save()
+//     .then(savedCourse => {
+//       console.log('New course saved:', savedCourse);
+//     })
+//     .catch(error => {
+//       console.error('Error saving course:', error);
+//     });
+// }
+
+module.exports= { get_Course , addToCart , getcourse , delete_item_cart , payment ,YourCourse ,getcount , get_lessons };

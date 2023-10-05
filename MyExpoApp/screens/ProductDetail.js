@@ -26,6 +26,7 @@ const ProductDetail = () => {
   const handle_back = () => {
     navigation.navigate("Home");
   };
+
   console.log("the token in the details :" + userToken);
   const token = userToken.replace("Bearer ", "");
   const decodedToken = jwt_decode(token);
@@ -38,7 +39,7 @@ const ProductDetail = () => {
       const userId = decodedToken.id;
       const courseId = itemData._id;
 
-      const response = await fetch("http://10.7.2.104:3010/api/addToCart", {
+      const response = await fetch("http://192.168.1.131:3010/api/addToCart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

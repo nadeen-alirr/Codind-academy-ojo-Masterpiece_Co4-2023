@@ -31,7 +31,7 @@ const navigation = useNavigation();
 useEffect(() => {
   const fetchPaymentCourses = async () => {
     try {
-      const response = await fetch(`http://10.7.2.104:3010/api/yourCourse/${id_user}`);
+      const response = await fetch(`http://192.168.1.131:3010/api/yourCourse/${id_user}`);
       const data = await response.json();
       setPaymentCourses(data.coursesInPayments);
       console.log(paymentCourses)
@@ -43,8 +43,8 @@ useEffect(() => {
   fetchPaymentCourses();
 }, []);
 
-  const handle_Items = () => {
-    navigation.navigate("Choose Lessons Course");
+  const handle_Items = (itemData) => {
+    navigation.navigate("Choose Lessons Course" ,{ itemData });
   };
   
   return (
@@ -66,7 +66,7 @@ useEffect(() => {
           </View>
           <TouchableOpacity
             style={styles.container_info_card}
-            onPress={handle_Items}
+            onPress={() =>handle_Items(course)}
           >
             <Text style={styles.duration}>{course.duration}</Text>
             <Text style={styles.Title}>{course.title}</Text>
@@ -122,12 +122,16 @@ const styles = StyleSheet.create({
   },
   Title: {
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 20,
   },
-  description: {},
+  description: {
+    color:'gray',
+
+  },
   container_info_card: {
     marginLeft: 15,
     padding: 12,
+    
   },
   container_price: {
     backgroundColor: "#0B7077",
@@ -138,9 +142,11 @@ const styles = StyleSheet.create({
     top: 160,
     right: 20,
   },
+
   price: {
     color: "#fff",
   },
+
   container: {
     flex: 1,
     backgroundColor: "#fff",

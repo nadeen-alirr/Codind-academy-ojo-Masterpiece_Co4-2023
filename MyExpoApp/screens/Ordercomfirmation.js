@@ -50,7 +50,7 @@ const Ordercomfirmation = () => {
       return;
     }
     try {
-      const response = await axios.post(`http://10.7.2.104:3010/api/checkout/${user_id}`, {
+      const response = await axios.post(`http://192.168.1.131:3010/api/checkout/${user_id}`, {
         coursesBought:checkoutData.selectedCourses, // Replace with actual course IDs
         nameOnCard,
         cardNumber,

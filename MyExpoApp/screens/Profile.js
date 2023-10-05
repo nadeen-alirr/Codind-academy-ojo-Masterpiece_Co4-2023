@@ -36,9 +36,9 @@ const Profile = () => {
       <TouchableOpacity style={styles.container_Your_Course} onPress={handle_course}>
         <Text style={styles.Course}>Your Course</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.container_Your_Course} onPress={handle_payment}>
+      {/* <TouchableOpacity style={styles.container_Your_Course} onPress={handle_payment}>
         <Text style={styles.Course} >Payment</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity style={styles.container_Your_Course} onPress={handle_cart}>
         <Text style={styles.Course} >Your Cart</Text>
       </TouchableOpacity>

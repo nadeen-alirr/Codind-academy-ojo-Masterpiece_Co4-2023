@@ -1,1 +1,1 @@
-export const Login_URL="http://10.7.2.104:3010/api/login"
+export const Login_URL="http://192.168.1.131:3010/api/login"
